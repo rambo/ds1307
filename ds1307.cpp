@@ -46,34 +46,45 @@ boolean ds1307::set_clock(byte years, byte month, byte day, byte hour, byte minu
     return true;
 }
 
+inline byte parse_bcd(byte reg_value, byte high_mask)
+{
+    return ((reg_value & high_mask) >> 4) * 10 + (reg_value & B00001111);
+}
 
 byte ds1307::second()
 {
-    return ((rtc_regs[0] & B01110000) >> 4) * 10 + (rtc_regs[0] & B00001111);
+    //return ((rtc_regs[0] & B01110000) >> 4) * 10 + (rtc_regs[0] & B00001111);
+    return parse_bcd(rtc_regs[0], B01110000);
 }
 byte ds1307::minute()
 {
-    return ((rtc_regs[1] & B01110000) >> 4) * 10 + (rtc_regs[1] & B00001111);
+    //return ((rtc_regs[1] & B01110000) >> 4) * 10 + (rtc_regs[1] & B00001111);
+    return parse_bcd(rtc_regs[1], B01110000);
 }
 byte ds1307::hour()
 {
-    return ((rtc_regs[2] & B00110000) >> 4) * 10 + (rtc_regs[2] & B00001111);
+    //return ((rtc_regs[2] & B00110000) >> 4) * 10 + (rtc_regs[2] & B00001111);
+    return parse_bcd(rtc_regs[2], B00110000);
 }
 byte ds1307::dow()
 {
-    return (rtc_regs[3] & B00000111);
+    //return (rtc_regs[3] & B00000111);
+    return parse_bcd(rtc_regs[3], B00000000);
 }
 byte ds1307::day()
 {
-    return ((rtc_regs[4] & B00110000) >> 4) * 10 + (rtc_regs[4] & B00001111);
+    //return ((rtc_regs[4] & B00110000) >> 4) * 10 + (rtc_regs[4] & B00001111);
+    return parse_bcd(rtc_regs[4], B00110000);
 }
 byte ds1307::month()
 {
-    return ((rtc_regs[5] & B00010000) >> 4) * 10 + (rtc_regs[5] & B00001111);
+    //return ((rtc_regs[5] & B00010000) >> 4) * 10 + (rtc_regs[5] & B00001111);
+    return parse_bcd(rtc_regs[5], B00010000);
 }
 byte ds1307::years()
 {
-    return ((rtc_regs[6] & B11110000) >> 4) * 10 + (rtc_regs[6] & B00001111);
+    //return ((rtc_regs[6] & B11110000) >> 4) * 10 + (rtc_regs[6] & B00001111);
+    return parse_bcd(rtc_regs[6], B11110000);
 }
 
 int ds1307::year()
