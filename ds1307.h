@@ -27,10 +27,11 @@ class ds1307 : public i2c_device
         int year(); // DS1307_CENTURY + 0-99
         byte dow(); // 1-7
         char* iso_ts(); // YYYY-MM-DD HH:MM:SS
+        boolean set_clock(byte years, byte month, byte day, byte hour, byte minute, byte second); // Note that years is 00-99
     
     protected:
         byte rtc_regs[7];
-		char isobuffer[15];
+		char isobuffer[20];
 };
 
 
