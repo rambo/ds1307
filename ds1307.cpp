@@ -13,7 +13,6 @@ boolean ds1307::read_clock()
 
 boolean ds1307::set_clock(byte years, byte month, byte day, byte hour, byte minute, byte second)
 {
-    // FIXME: there is something wrong with my bit-magic here
     byte tmp[3];
     // Seconds register (also clock-halt which we disable at this point)
     tmp[0] = ((second / 10) << 4) | (second % 10);
