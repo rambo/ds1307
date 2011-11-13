@@ -1,6 +1,16 @@
-// Get this from http://dsscircuits.com/articles/arduino-i2c-master-library.html
+/**
+ * Example sketch to show the current time from the RTC and register states
+ *
+ * Can also be used to set the (24h) clock by sending YYYY-MM-DD HH:MM:SS (use newline as line ending) in serial monitor
+ *
+ * The iso_ts() method used sprintf that will use quite a bit of program memory, if this is a problem define DS1307_CONSERVE_SPACE 
+ * before including the library to disable that method
+ *
+ */
+// https://github.com/rambo/I2C
 #include <I2C.h> // For some weird reason including this in the relevant .h file does not work
 #define I2C_DEVICE_DEBUG
+// Get this from https://github.com/rambo/i2c_device
 #include <i2c_device.h> // For some weird reason including this in the relevant .h file does not work
 #include <ds1307.h>
 #define COMMAND_STRING_SIZE 20
@@ -94,12 +104,13 @@ inline void read_command()
             
             memset(&incoming_command, 0, COMMAND_STRING_SIZE+2);
             incoming_position = 0;
+            Serial.flush();
+            break;
         }
     }
 }
 
 unsigned long last_report_time;
-
 void loop()
 {
     read_command();
@@ -107,7 +118,9 @@ void loop()
     {
         DS1307.read_clock();
         
-        //Serial.println(DS1307.iso_ts());
+#ifndef DS1307_CONSERVE_SPACE
+        Serial.println(DS1307.iso_ts());
+#else
         Serial.print(DS1307.year(), DEC);
         Serial.print("-");
         Serial.print(DS1307.month(), DEC);
@@ -119,16 +132,9 @@ void loop()
         Serial.print(DS1307.minute(), DEC);
         Serial.print(":");
         Serial.println(DS1307.second(), DEC);
+#endif
         
         DS1307.dump_registers(0x0, 0x7);
-        
-        Serial.print("incoming_command: '");
-        Serial.print(incoming_command);
-        Serial.println("'");
-        Serial.print("incoming_position: ");
-        Serial.println(incoming_position, DEC);
-        Serial.print("incoming_command[incoming_position-1]: 0x");
-        Serial.println(incoming_command[incoming_position-1], HEX);
 
         last_report_time = millis();
     }

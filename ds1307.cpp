@@ -85,24 +85,24 @@ int ds1307::year()
 {
     return DS1307_CENTURY + years();
 }
-
+#ifndef DS1307_CONSERVE_SPACE
 char* ds1307::iso_ts()
 {
-    /**
-     * This causes a weird compile error
     sprintf(isobuffer,"%04u-%02u-%02u %02u:%02u:%02u",
-        this->year(),
-        this->month(),
-        this->day(),
-        this->hour(),
-        this->minute(),
-        this->second()
+        /**
+         * Inlined versions of the register parsing functions
+         */
+        (int)(DS1307_CENTURY + parse_bcd(rtc_regs[6], B11110000)),
+        (int)parse_bcd(rtc_regs[5], B00010000),
+        (int)parse_bcd(rtc_regs[4], B00110000),
+        (int)parse_bcd(rtc_regs[2], B00110000),
+        (int)parse_bcd(rtc_regs[1], B01110000),
+        (int)parse_bcd(rtc_regs[0], B01110000)
     );
-    */
-    
+
     return isobuffer;
 }
-
+#endif
 
 // Instance 
 ds1307 DS1307 = ds1307();
