@@ -16,11 +16,11 @@ boolean ds1307::set_clock(byte years, byte month, byte day, byte hour, byte minu
     // FIXME: there is something wrong with my bit-magic here
     byte tmp[3];
     // Seconds register (also clock-halt which we disable at this point)
-    tmp[0] = ((second / 10) << 4) | ((second - (second / 10)) & B00001111);
+    tmp[0] = ((second / 10) << 4) | (second % 10);
     // Minutes register
-    tmp[1] = ((minute / 10) << 4) | ((minute - (minute / 10)) & B00001111);
+    tmp[1] = ((minute / 10) << 4) | (minute % 10);
     // Hours register (and set 24h mode)
-    tmp[2] = B010000 | ((hour / 10) << 4) | ((hour - (hour / 10)) & B00001111);
+    tmp[2] = B010000 | ((hour / 10) << 4) | (hour % 10);
     // Write the above values
     if (!this->write_many(0x0, 3, tmp))
     {
@@ -28,11 +28,11 @@ boolean ds1307::set_clock(byte years, byte month, byte day, byte hour, byte minu
     }
     // address 0x3 is skipped
     // day
-    tmp[0] = ((day / 10) << 4) | ((day - (day / 10)) & B00001111);
+    tmp[0] = ((day / 10) << 4) | (day % 10);
     // month
-    tmp[1] = ((month / 10) << 4) | ((month - (month / 10)) & B00001111);
+    tmp[1] = ((month / 10) << 4) | (month % 10);
     // year
-    tmp[2] = ((years / 10) << 4) | ((years - (years / 10)) & B00001111);
+    tmp[2] = ((years / 10) << 4) | (years % 10);
     if (!this->write_many(0x4, 3, tmp))
     {
         return false;
