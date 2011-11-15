@@ -15,7 +15,7 @@
 #include <ds1307.h>
 #define COMMAND_STRING_SIZE 20
 
-char incoming_command[COMMAND_STRING_SIZE];
+char incoming_command[COMMAND_STRING_SIZE+2]; // Allocate for CRLF too
 byte incoming_position;
 
 void setup()
