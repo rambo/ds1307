@@ -19,7 +19,7 @@ boolean ds1307::set_clock(byte years, byte month, byte day, byte hour, byte minu
     // Minutes register
     tmp[1] = ((minute / 10) << 4) | (minute % 10);
     // Hours register (and set 24h mode)
-    tmp[2] = B010000 | ((hour / 10) << 4) | (hour % 10);
+    tmp[2] = B01000000 | ((hour / 10) << 4) | (hour % 10);
     // Write the above values
     if (!this->write_many(0x0, 3, tmp))
     {
