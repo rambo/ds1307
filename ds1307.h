@@ -1,7 +1,7 @@
 // safety againts double-include
 #ifndef ds1307_h
 #define ds1307_h
-#include <WProgram.h> 
+#include <Arduino.h> 
 #include <i2c_device.h>
 #ifndef DS1307_ADDRESS
 // 7 bit binary addr 1101000 0x68 -> 0xD0 write, 0xD1 read
