@@ -1,19 +1,19 @@
 #include "ds1307.h"
 
 
-void ds1307::begin(uint8_t wire_begin)
+void ds1307::begin(boolean wire_begin)
 {
     i2c_device::begin(DS1307_ADDRESS, wire_begin);
 }
 
-uint8_t ds1307::read_clock()
+boolean ds1307::read_clock()
 {
     return read_many(0x0, 7, rtc_regs);
 }
 
-uint8_t ds1307::set_clock(uint8_t years, byte month, byte day, byte hour, byte minute, byte second)
+boolean ds1307::set_clock(byte years, byte month, byte day, byte hour, byte minute, byte second)
 {
-    uint8_t tmp[3];
+    byte tmp[3];
     // Seconds register (also clock-halt which we disable at this point)
     tmp[0] = ((second / 10) << 4) | (second % 10);
     // Minutes register
@@ -39,42 +39,42 @@ uint8_t ds1307::set_clock(uint8_t years, byte month, byte day, byte hour, byte m
     return true;
 }
 
-inline uint8_t parse_bcd(byte reg_value, byte high_mask)
+inline byte parse_bcd(byte reg_value, byte high_mask)
 {
     return ((reg_value & high_mask) >> 4) * 10 + (reg_value & B00001111);
 }
 
-uint8_t ds1307::second()
+byte ds1307::second()
 {
     //return ((rtc_regs[0] & B01110000) >> 4) * 10 + (rtc_regs[0] & B00001111);
     return parse_bcd(rtc_regs[0], B01110000);
 }
-uint8_t ds1307::minute()
+byte ds1307::minute()
 {
     //return ((rtc_regs[1] & B01110000) >> 4) * 10 + (rtc_regs[1] & B00001111);
     return parse_bcd(rtc_regs[1], B01110000);
 }
-uint8_t ds1307::hour()
+byte ds1307::hour()
 {
     //return ((rtc_regs[2] & B00110000) >> 4) * 10 + (rtc_regs[2] & B00001111);
     return parse_bcd(rtc_regs[2], B00110000);
 }
-uint8_t ds1307::dow()
+byte ds1307::dow()
 {
     //return (rtc_regs[3] & B00000111);
     return parse_bcd(rtc_regs[3], B00000000);
 }
-uint8_t ds1307::day()
+byte ds1307::day()
 {
     //return ((rtc_regs[4] & B00110000) >> 4) * 10 + (rtc_regs[4] & B00001111);
     return parse_bcd(rtc_regs[4], B00110000);
 }
-uint8_t ds1307::month()
+byte ds1307::month()
 {
     //return ((rtc_regs[5] & B00010000) >> 4) * 10 + (rtc_regs[5] & B00001111);
     return parse_bcd(rtc_regs[5], B00010000);
 }
-uint8_t ds1307::years()
+byte ds1307::years()
 {
     //return ((rtc_regs[6] & B11110000) >> 4) * 10 + (rtc_regs[6] & B00001111);
     return parse_bcd(rtc_regs[6], B11110000);
