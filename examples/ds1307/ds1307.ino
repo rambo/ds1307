@@ -20,7 +20,10 @@ byte incoming_position;
 
 void setup()
 {
+    Serial.begin(115200);
     DS1307.begin(true);
+    I2c.pullup(true);
+    Serial.print("Booted");
 }
 
 inline void process_command()
