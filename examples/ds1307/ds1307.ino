@@ -23,7 +23,7 @@ void setup()
     Serial.begin(115200);
     DS1307.begin(true);
     I2c.pullup(true);
-    Serial.print("Booted");
+    Serial.print(F("Booted"));
 }
 
 inline void process_command()
@@ -53,19 +53,19 @@ inline void process_command()
     tmp[1] = incoming_command[18];
     byte second = atoi(tmp);
 
-    Serial.print("Parsed command '");
+    Serial.print(F("Parsed command '"));
     Serial.print(incoming_command);
-    Serial.print("' to: ");
+    Serial.print(F("' to: "));
     Serial.print(year, DEC);
-    Serial.print("-");
+    Serial.print(F("-"));
     Serial.print(month, DEC);
-    Serial.print("-");
+    Serial.print(F("-"));
     Serial.print(day, DEC);
-    Serial.print(" ");
+    Serial.print(F(" "));
     Serial.print(hour, DEC);
-    Serial.print(":");
+    Serial.print(F(":"));
     Serial.print(minute, DEC);
-    Serial.print(":");
+    Serial.print(F(":"));
     Serial.println(second, DEC);
     
     DS1307.set_clock(year, month, day, hour, minute, second);
@@ -101,9 +101,9 @@ inline void read_command()
         // Sanity check buffer sizes
         if (incoming_position > COMMAND_STRING_SIZE+2)
         {
-            Serial.print("PANIC: No end-of-line seen and incoming_position=");
+            Serial.print(F("PANIC: No end-of-line seen and incoming_position="));
             Serial.print(incoming_position, DEC);
-            Serial.println(" clearing buffers");
+            Serial.println(F(" clearing buffers"));
             
             memset(&incoming_command, 0, COMMAND_STRING_SIZE+2);
             incoming_position = 0;
@@ -125,15 +125,15 @@ void loop()
         Serial.println(DS1307.iso_ts());
 #else
         Serial.print(DS1307.year(), DEC);
-        Serial.print("-");
+        Serial.print(F("-"));
         Serial.print(DS1307.month(), DEC);
-        Serial.print("-");
+        Serial.print(F("-"));
         Serial.print(DS1307.day(), DEC);
-        Serial.print(" ");
+        Serial.print(F(" "));
         Serial.print(DS1307.hour(), DEC);
-        Serial.print(":");
+        Serial.print(F(":"));
         Serial.print(DS1307.minute(), DEC);
-        Serial.print(":");
+        Serial.print(F(":"));
         Serial.println(DS1307.second(), DEC);
 #endif
         
